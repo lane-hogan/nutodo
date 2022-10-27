@@ -12,19 +12,64 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   final List<Todo> todos = [
-    Todo(id: '01', text: 'Morning Exercise', completed: true),
-    Todo(id: '02', text: 'Buy Groceries', completed: true),
-    Todo(id: '03', text: 'Check Emails'),
-    Todo(id: '04', text: 'Team Meeting'),
-    Todo(id: '05', text: 'Work on apps for 2 hours'),
-    Todo(id: '06', text: 'Dinner with John'),
+    Todo(text: 'Morning Exercise', completed: true),
+    Todo(text: 'Buy Groceries', completed: true),
+    Todo(text: 'Check Emails'),
+    Todo(text: 'Team Meeting'),
+    Todo(text: 'Work on apps for 2 hours'),
+    Todo(text: 'Dinner with John'),
   ];
+
+  final TextEditingController _todoTextController = TextEditingController();
 
   void deleteTodo(int index) {
     setState(() {
       todos.removeAt(index);
     });
   }
+
+  void addTodo() {
+    Todo todo = Todo(text: _todoTextController.text, completed: false);
+    setState(() {
+      todos.add(todo);
+    });
+    _todoTextController.clear();
+    Navigator.of(context).pop();
+  }
+
+  void showAddTodoDialog(BuildContext context) => showDialog(
+        context: context,
+        builder: (context) => AlertDialog(
+          content: TextField(
+            controller: _todoTextController,
+            autofocus: true,
+            decoration: InputDecoration(
+              hintText: 'Enter todo item',
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(20.0),
+              ),
+            ),
+          ),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+                _todoTextController.clear();
+              },
+              child: const Text(
+                'Cancel',
+                style: TextStyle(
+                  color: AppColors.red,
+                ),
+              ),
+            ),
+            TextButton(
+              onPressed: addTodo,
+              child: const Text('Create'),
+            ),
+          ],
+        ),
+      );
 
   @override
   Widget build(BuildContext context) {
@@ -71,6 +116,11 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
           ],
         ),
+      ),
+      floatingActionButton: FloatingActionButton(
+        backgroundColor: AppColors.blue,
+        child: const Icon(Icons.add, size: 30.0),
+        onPressed: () => showAddTodoDialog(context),
       ),
     );
   }
