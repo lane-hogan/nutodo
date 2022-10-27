@@ -17,7 +17,7 @@ class MyApp extends StatelessWidget {
         statusBarColor: Colors.transparent,
       ),
     );
-    return MaterialApp(
+    return const MaterialApp(
       title: 'Nutodo',
       home: HomeScreen(),
     );
