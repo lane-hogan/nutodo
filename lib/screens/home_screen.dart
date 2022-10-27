@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:nutodo/models/todo.dart';
 import 'package:nutodo/utils/colors.dart';
-import 'package:nutodo/widgets/search_bar.dart';
 import 'package:nutodo/widgets/todo_item.dart';
 
 class HomeScreen extends StatefulWidget {
