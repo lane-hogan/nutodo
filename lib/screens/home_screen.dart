@@ -32,6 +32,13 @@ class _HomeScreenState extends State<HomeScreen> {
     return Scaffold(
       backgroundColor: AppColors.background,
       appBar: AppBar(
+        title: const Text(
+          'Todos',
+          style: TextStyle(
+            color: AppColors.black,
+            fontWeight: FontWeight.w500,
+          ),
+        ),
         elevation: 0,
         backgroundColor: AppColors.background,
         leading: IconButton(
@@ -45,26 +52,24 @@ class _HomeScreenState extends State<HomeScreen> {
         padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 16.0),
         child: Column(
           children: [
-            const SearchBar(),
-            Container(
-              margin: const EdgeInsets.only(top: 50.0, bottom: 20.0),
-              child: const Text(
-                'Todos',
-                style: TextStyle(
-                  fontSize: 32.0,
-                  fontWeight: FontWeight.w500,
-                ),
-              ),
-            ),
             Expanded(
-              child: ListView.builder(
-                itemCount: todos.length,
-                itemBuilder: (context, index) => TodoItem(
-                  todo: todos[index],
-                  onDeleteTapped: () => deleteTodo(index),
-                ),
-              ),
-            )
+              child: todos.isEmpty
+                  ? const Center(
+                      child: Text(
+                        'No items in your list',
+                        style: TextStyle(
+                          color: AppColors.grey,
+                        ),
+                      ),
+                    )
+                  : ListView.builder(
+                      itemCount: todos.length,
+                      itemBuilder: (context, index) => TodoItem(
+                        todo: todos[index],
+                        onDeleteTapped: () => deleteTodo(index),
+                      ),
+                    ),
+            ),
           ],
         ),
       ),
