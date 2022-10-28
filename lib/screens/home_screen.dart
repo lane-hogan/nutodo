@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:nutodo/data/todo_database.dart';
 import 'package:nutodo/models/todo.dart';
 import 'package:nutodo/utils/colors.dart';
 import 'package:nutodo/widgets/todo_item.dart';
@@ -11,30 +12,33 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  final List<Todo> todos = [
-    Todo(text: 'Morning Exercise', completed: true),
-    Todo(text: 'Buy Groceries', completed: true),
-    Todo(text: 'Check Emails'),
-    Todo(text: 'Team Meeting'),
-    Todo(text: 'Work on apps for 2 hours'),
-    Todo(text: 'Dinner with John'),
-  ];
+  TodoDatabase db = TodoDatabase();
 
   final TextEditingController _todoTextController = TextEditingController();
 
+  @override
+  void initState() {
+    super.initState();
+    db.load();
+    db.update();
+  }
+
   void deleteTodo(int index) {
     setState(() {
-      todos.removeAt(index);
+      db.todos.removeAt(index);
     });
+    db.update();
   }
 
   void addTodo() {
     Todo todo = Todo(text: _todoTextController.text, completed: false);
     setState(() {
-      todos.add(todo);
+      db.todos.add(todo);
     });
     _todoTextController.clear();
     Navigator.of(context).pop();
+
+    db.update();
   }
 
   void showAddTodoDialog(BuildContext context) => showDialog(
@@ -97,7 +101,7 @@ class _HomeScreenState extends State<HomeScreen> {
         child: Column(
           children: [
             Expanded(
-              child: todos.isEmpty
+              child: db.todos.isEmpty
                   ? const Center(
                       child: Text(
                         'No items in your list',
@@ -107,9 +111,9 @@ class _HomeScreenState extends State<HomeScreen> {
                       ),
                     )
                   : ListView.builder(
-                      itemCount: todos.length,
+                      itemCount: db.todos.length,
                       itemBuilder: (context, index) => TodoItem(
-                        todo: todos[index],
+                        todo: db.todos[index],
                         onDeleteTapped: () => deleteTodo(index),
                       ),
                     ),
